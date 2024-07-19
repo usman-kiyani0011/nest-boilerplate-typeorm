@@ -13,6 +13,7 @@ async function bootstrap() {
   const HOST: string = config.get<string>('BACKEND_HOST');
   const PORT: number = config.get<number>('BACKEND_PORT');
   const NODE_ENV: string = config.get<string>('NODE_ENV');
+  const VERSION: string = config.get<string>('VERSION');
 
   app.enableCors({
     origin: true,
@@ -23,29 +24,29 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
+      whitelist: true,
       transform: true,
       forbidNonWhitelisted: true,
       transformOptions: {
-        enableImplicitConversion: true, //If set to true class-transformer will attempt conversion based on TS reflected type
-      },
-    }),
-  );
-
-  app.use(
-    ['/api/docs*'],
-    basicAuth({
-      challenge: true,
-      users: {
-        [config.get<string>('SWAGGER_USER_NAME')]:
-          config.get<string>('SWAGGER_PASSWORD'),
+        enableImplicitConversion: true,
       },
     }),
   );
 
   if (NODE_ENV !== 'production') {
+    app.use(
+      ['/api/docs*'],
+      basicAuth({
+        challenge: true,
+        users: {
+          [config.get<string>('SWAGGER_USER_NAME')]:
+            config.get<string>('SWAGGER_PASSWORD'),
+        },
+      }),
+    );
     const options = new DocumentBuilder()
-      .setTitle('Test - Title')
-      .setVersion('1.0')
+      .setTitle('API')
+      .setVersion(VERSION)
       .addBearerAuth()
       .build();
 

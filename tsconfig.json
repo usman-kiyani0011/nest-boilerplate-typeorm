@@ -16,6 +16,14 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@shared/constants": ["src/shared/constants"],
+      "@shared/dto": ["src/shared/dto"],
+      "@shared/interfaces": ["src/shared/interfaces"],
+      "@shared/functions": ["src/shared/functions"],
+      "@shared/decorators": ["src/shared/decorators"],
+      "@shared/auth": ["src/modules/auth"],
+    }
   }
 }
