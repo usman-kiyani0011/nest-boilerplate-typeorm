@@ -3,24 +3,26 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from './entities';
 import { repositories } from './repositories';
 import { ensureDatabaseExists } from './database-connection';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      useFactory: async () => {
+      useFactory: async (configService: ConfigService) => {
         // Ensure database exists before setting up TypeORM
         await ensureDatabaseExists();
         return {
           type: 'mysql',
-          host: process.env.DATABASE_HOST,
-          port: Number(process.env.DATABASE_PORT) || 3306,
-          username: process.env.DATABASE_USERNAME,
-          password: process.env.DATABASE_PASSWORD,
-          database: process.env.DATABASE_NAME,
+          host: configService.getOrThrow('DATABASE_HOST'),
+          port: configService.getOrThrow('DATABASE_PORT'),
+          username: configService.getOrThrow('DATABASE_USERNAME'),
+          password: configService.getOrThrow('DATABASE_PASSWORD'),
+          database: configService.getOrThrow('DATABASE_NAME'),
           entities: entities,
           synchronize: true,
         };
       },
+      inject: [ConfigService],
     }),
     TypeOrmModule.forFeature(entities),
   ],

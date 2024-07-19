@@ -9,11 +9,11 @@ import helmet from 'helmet';
 async function bootstrap() {
   const app: NestApplication = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
-  const PROTOCOL: string = config.get<string>('BACKEND_PROTOCOL');
-  const HOST: string = config.get<string>('BACKEND_HOST');
-  const PORT: number = config.get<number>('BACKEND_PORT');
-  const NODE_ENV: string = config.get<string>('NODE_ENV');
-  const VERSION: string = config.get<string>('VERSION');
+  const PROTOCOL: string = config.getOrThrow<string>('BACKEND_PROTOCOL');
+  const HOST: string = config.getOrThrow<string>('BACKEND_HOST');
+  const PORT: number = config.getOrThrow<number>('BACKEND_PORT');
+  const NODE_ENV: string = config.getOrThrow<string>('NODE_ENV');
+  const VERSION: string = config.getOrThrow<string>('VERSION');
 
   app.enableCors({
     origin: true,
