@@ -9,6 +9,9 @@ import { modules } from './modules';
 @Module({
   imports: [
     DatabaseModule,
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+    }),
     ThrottlerModule.forRoot([
       {
         ttl: 10000,
