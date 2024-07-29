@@ -1,3 +1,3 @@
-import { UserRepository } from './user.repository';
+import { SystemUserRepository } from './system-user.repository';
 
-export const repositories = [UserRepository];
+export const repositories = [SystemUserRepository];

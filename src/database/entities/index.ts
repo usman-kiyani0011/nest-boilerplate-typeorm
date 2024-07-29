@@ -1,3 +1,3 @@
-import { User } from './user.entity';
+import { SystemUser } from './system-user.entity';
 
-export const entities = [User];
+export const entities = [SystemUser];

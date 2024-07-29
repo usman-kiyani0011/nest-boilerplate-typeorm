@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UserRepository } from 'src/database/repositories/user.repository';
+import { SystemUserRepository } from 'src/database/repositories/system-user.repository';
 import * as bcrypt from 'bcrypt';
 import { UserRole } from '@shared/constants';
 import { JwtService } from '@nestjs/jwt';
@@ -7,24 +7,24 @@ import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userRepository: UserRepository,
+    private readonly systemUserRepository: SystemUserRepository,
     private readonly jwtService: JwtService,
   ) {}
   async signup(payload: any) {
     const { username, password, name } = payload;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await this.userRepository.create({
+    const user = await this.systemUserRepository.create({
       username,
       password: hashedPassword,
       name,
       role: UserRole.USER,
     });
-    return this.userRepository.save(user);
+    return this.systemUserRepository.save(user);
   }
 
   async login(payload: any) {
     const { username, password } = payload;
-    const user = await this.userRepository.findOne({ where: { username } });
+    const user = await this.systemUserRepository.findOne({ where: { username } });
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');

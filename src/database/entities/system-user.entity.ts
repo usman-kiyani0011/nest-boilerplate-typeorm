@@ -2,8 +2,8 @@ import { Column, Entity, Index } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { UserRole } from '@shared/constants';
 
-@Entity('users')
-export class User extends BaseEntity {
+@Entity('systemUsers')
+export class SystemUser extends BaseEntity {
   @Index('user-username-idx')
   @Column('varchar', { unique: true, length: 20 })
   username: string;
