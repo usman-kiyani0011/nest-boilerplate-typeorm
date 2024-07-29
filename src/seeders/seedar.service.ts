@@ -9,7 +9,7 @@ export class UserSeederService {
     private readonly systemUserRepository: SystemUserRepository,
   ) {}
 
-  async seed() {
+  async systemUserSeed() {
 
       const user = await this.systemUserRepository.create({
         username: 'admin',
