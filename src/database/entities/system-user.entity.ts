@@ -4,14 +4,12 @@ import { UserRole } from '@shared/constants';
 
 @Entity('systemUsers')
 export class SystemUser extends BaseEntity {
-  @Index('user-username-idx')
   @Column('varchar', { unique: true, length: 20 })
   username: string;
 
   @Column('varchar')
   password: string;
 
-  @Index('user-name-idx')
   @Column('varchar')
   name: string;
 
