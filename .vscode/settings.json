@@ -1,3 +1,8 @@
 {
-  "cSpell.words": ["nestjs", "tinyint", "typeorm"]
+  "cSpell.words": [
+    "nestjs",
+    "oracledb",
+    "tinyint",
+    "typeorm"
+  ]
 }

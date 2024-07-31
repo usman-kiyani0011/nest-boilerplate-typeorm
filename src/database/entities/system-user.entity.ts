@@ -16,9 +16,9 @@ export class SystemUser extends BaseEntity {
   @Column({ type: 'json', nullable: true }) // ip, deviceId, city, country, network
   metadata?: Record<string, any>;
 
-  @Column({ type: 'enum', enum: UserRole })
-  role: UserRole;
+  @Column({ type: 'varchar', length: 20 })
+  role: string;
 
-  @Column({ type: 'tinyint', default: 1, unsigned: true }) // 1 - active | 2 - inactive
+  @Column({ type: 'number', default: 1, unsigned: true }) // 1 - active | 2 - inactive
   status?: number;
 }
