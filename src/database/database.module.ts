@@ -9,14 +9,19 @@ import { ConfigService } from '@nestjs/config';
   imports: [
     TypeOrmModule.forRootAsync({
       useFactory: async (configService: ConfigService) => {
+        const host = configService.get<string>('DATABASE_HOST');
+        const port = configService.get<number>('DATABASE_PORT');
+        const sid = configService.get<string>('DATABASE_SID');
+        const connectString = `${host}:${port}/${sid}`;
         return {
           type: 'oracle',
-          host: configService.getOrThrow('DATABASE_HOST'),
-          port: configService.getOrThrow('DATABASE_PORT'),
+          host,
+          port,
           username: configService.getOrThrow('DATABASE_USERNAME'),
           password: configService.getOrThrow('DATABASE_PASSWORD'),
           database: configService.getOrThrow('DATABASE_NAME'),
-          sid: configService.getOrThrow('DATABASE_SID'),
+          sid,
+          connectString,
           entities: entities,
           synchronize: configService.getOrThrow('DATABASE_SYNCHRONIZE'),
         };
