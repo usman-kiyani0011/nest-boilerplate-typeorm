@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from './entities';
 import { repositories } from './repositories';
-// import { ensureDatabaseExists } from './database-connection';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
