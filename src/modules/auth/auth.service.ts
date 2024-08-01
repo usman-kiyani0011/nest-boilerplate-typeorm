@@ -63,9 +63,6 @@ export class AuthService {
       const decoded = this.jwtService.verify(token, {
         secret: await this.config.get('JWT_SECRET'),
       });
-      if (!decoded || !decoded?.sub || !decoded?.isAccessToken)
-        throw new UnauthorizedException('Invalid Token');
-
       const user = await this.systemUserRepository.findOne({
         where: { username: decoded?.username },
       });
@@ -74,8 +71,6 @@ export class AuthService {
 
       return user;
     } catch (error) {
-      console.log('errpr', error);
-
       throw error;
     }
   }

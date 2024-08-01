@@ -30,4 +30,11 @@ export class AuthController {
     return await this.authService.login(payload);
   }
 
+  @ApiBearerAuth()
+  @Get('login')
+  @Auth(UserRole.ADMIN)
+  @HttpCode(HttpStatus.OK)
+  async test(): Promise<any> {
+    return { hello: 'heh' };
+  }
 }
