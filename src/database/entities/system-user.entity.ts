@@ -13,11 +13,12 @@ export class SystemUser extends BaseEntity {
   @Column('varchar')
   name: string;
 
-  @Column({ type: 'json', nullable: true }) // ip, deviceId, city, country, network
-  metadata?: Record<string, any>;
-
-  @Column({ type: 'varchar', length: 20 })
-  role: string;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    default: UserRole.USER,
+  })
+  role: UserRole;
 
   @Column({ type: 'number', default: 1, unsigned: true }) // 1 - active | 2 - inactive
   status?: number;

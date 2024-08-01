@@ -3,31 +3,30 @@ import {
   Get,
   Post,
   Body,
-  Param,
   HttpCode,
   HttpStatus,
-  Patch,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginReqDto, SignUpReqDto } from './auth.dto';
+import { IResponse } from 'src/shared/interfaces/response.interface';
+import { Auth } from '@shared/decorators';
+import { UserRole } from '@shared/constants';
 
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signup')
+  @Post('user-signup')
   @HttpCode(HttpStatus.CREATED)
-  // @ApiCreatedResponse({ type: SignUpResDto })
-  async signup(@Body() payload: SignUpReqDto) {
+  async signup(@Body() payload: SignUpReqDto): Promise<IResponse> {
     return await this.authService.signup(payload);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  // @ApiOkResponse({ type: LoginResDto })
-  async login(@Body() payload: LoginReqDto) {
+  async login(@Body() payload: LoginReqDto): Promise<IResponse> {
     return await this.authService.login(payload);
   }
 

@@ -1,7 +1,6 @@
-import { applyDecorators, SetMetadata } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { SetMetadata } from '@nestjs/common';
+import { UserRole } from '@shared/constants';
 /**
  * @description Auth is used for JWT Authentication
  */
-export const Auth = () =>
-  applyDecorators(SetMetadata('authenticatedOnly', true), ApiBearerAuth());
+export const Auth = (...roles: UserRole[]) => SetMetadata('role', roles);
