@@ -1,6 +1,5 @@
 export interface IResponse {
-  isSuccess: boolean;
-  respCode: string;
-  msg: string;
-  respData?: any;
+  statusCode: number;
+  message: string;
+  data?: any;
 }

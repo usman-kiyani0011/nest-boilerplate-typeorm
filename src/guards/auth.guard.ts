@@ -1,41 +1,52 @@
 import {
+  Injectable,
   CanActivate,
   ExecutionContext,
-  Injectable,
   UnauthorizedException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthService } from '@shared/auth';
+import { UserRole } from '@shared/constants';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
-    private readonly authService: AuthService, // TODO
+    private readonly authService: AuthService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const secured = this.reflector.get<boolean>(
-      'authenticatedOnly',
+    const requiredRoles = this.reflector.getAllAndOverride<UserRole[]>('role', [
       context.getHandler(),
-    );
-    if (!secured) return true;
+      context.getClass(),
+    ]);
+
+    if (!requiredRoles) {
+      return true;
+    }
+
+    const request = context.switchToHttp().getRequest();
+    const authHeader = request.headers.authorization;
+
+    if (!authHeader) {
+      throw new UnauthorizedException('Authorization token is missing');
+    }
+
+    const token = authHeader.split(' ')[1];
+    if (!token) {
+      throw new UnauthorizedException('Token is missing');
+    }
 
     try {
-      const request = context.switchToHttp().getRequest();
-      const { authorization }: any = request.headers;
-      if (!authorization || authorization.trim() === '') {
-        throw new UnauthorizedException('Please provide token');
+      const user = await this.authService.verifyToken(token);
+
+      if (!user || !user.role || !requiredRoles.includes(user.role)) {
+        throw new UnauthorizedException('Permission denied');
       }
-      const authToken = authorization.replace(/bearer/gim, '').trim();
-      const response = await this.authService.verifyToken({ token: authToken });
-      request.user = response;
-      return true;
     } catch (error) {
-      throw new ForbiddenException(
-        error.message || 'session expired! Please sign In',
-      );
+      throw error;
     }
+
+    return true;
   }
 }

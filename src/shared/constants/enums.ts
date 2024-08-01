@@ -10,3 +10,8 @@ export enum LogContext {
     RESPONSE = 'RESPONSE',
 
 }
+
+export enum UserRole {
+    ADMIN = 'ADMIN',
+    USER = 'USER',
+  }

@@ -2,22 +2,25 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from './entities';
 import { repositories } from './repositories';
-import { ensureDatabaseExists } from './database-connection';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
       useFactory: async (configService: ConfigService) => {
-        // Ensure database exists before setting up TypeORM
-        await ensureDatabaseExists();
+        const host = configService.get<string>('DATABASE_HOST');
+        const port = configService.get<number>('DATABASE_PORT');
+        const sid = configService.get<string>('DATABASE_SID');
+        const connectString = `${host}:${port}/${sid}`;
         return {
-          type: 'mysql',
-          host: configService.getOrThrow('DATABASE_HOST'),
-          port: configService.getOrThrow('DATABASE_PORT'),
+          type: 'oracle',
+          host,
+          port,
           username: configService.getOrThrow('DATABASE_USERNAME'),
           password: configService.getOrThrow('DATABASE_PASSWORD'),
           database: configService.getOrThrow('DATABASE_NAME'),
+          sid,
+          connectString,
           entities: entities,
           synchronize: configService.getOrThrow('DATABASE_SYNCHRONIZE'),
         };
