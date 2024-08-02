@@ -4,7 +4,6 @@ import {
     ArgumentsHost,
     HttpException,
     HttpStatus,
-    Logger,
 } from '@nestjs/common';
 import { HttpAdapterHost } from '@nestjs/core';
 import { STATUS_CODES } from 'node:http';
